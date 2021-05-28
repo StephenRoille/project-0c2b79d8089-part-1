@@ -1,19 +1,20 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
-import PropTypes from "prop-types"
 import Spinner from "../layout/Spinner"
 import Repos from "../repos/Repos"
+import GithubContext from "../../context/github/githubContext"
 
-const User = ({ user, getUser, userRepos, getUserRepos, loading, match }) => {
+const User = (props) => {
+  const githubContext = useContext(GithubContext)
   useEffect(() => {
-    getUser(match.params.username)
-    getUserRepos(match.params.username)
+    githubContext.getUser(props.match.params.username)
+    githubContext.getUserRepos(props.match.params.username)
   }, []) // eslint-disable-line
 
-  if (loading) {
+  if (githubContext.loading) {
     return <Spinner></Spinner>
   }
-
+  const { user } = githubContext
   return (
     <>
       <Link to='/' className='btn btn-light'>
@@ -43,7 +44,12 @@ const User = ({ user, getUser, userRepos, getUserRepos, loading, match }) => {
               <p>{user.bio}</p>
             </>
           )}
-          <a href={user.html_url} className='btn btn-dark my-1'>
+          <a
+            href={user.html_url}
+            className='btn btn-dark my-1'
+            target='_blank'
+            rel='noreferrer'
+          >
             Visit GitHub Profile
           </a>
           <ul>
@@ -67,7 +73,9 @@ const User = ({ user, getUser, userRepos, getUserRepos, loading, match }) => {
               {user.blog && (
                 <>
                   <b>Blog: </b>
-                  {user.blog}
+                  <a href={user.blog} target='_blank' rel='noreferrer'>
+                    {user.blog}
+                  </a>
                 </>
               )}
             </li>
@@ -80,17 +88,9 @@ const User = ({ user, getUser, userRepos, getUserRepos, loading, match }) => {
         <div className='badge badge-light'>Public Repositories: {user.public_repos}</div>
         <div className='badge badge-dark'>Public Gists: {user.public_gists}</div>
       </div>
-      <Repos userRepos={userRepos} />
+      <Repos userRepos={githubContext.userRepos} />
     </>
   )
-}
-
-User.propTypes = {
-  loading: PropTypes.bool,
-  user: PropTypes.object.isRequired,
-  getUser: PropTypes.func.isRequired,
-  getUserRepos: PropTypes.func.isRequired,
-  userRepos: PropTypes.array.isRequired,
 }
 
 export default User

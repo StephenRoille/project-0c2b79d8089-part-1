@@ -1,102 +1,41 @@
-import axios from "axios"
-import { useState } from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
+// styles
 import "./App.css"
-import Navbar from "./components/layout/Navbar"
-import Users from "./components/users/Users"
-import Alert from "./components/layout/Alert"
-import Search from "./components/users/Search"
+
+// pages
+import _404 from "./components/pages/_404"
 import About from "./components/pages/About"
+import Home from "./components/pages/Home"
 import User from "./components/pages/User"
+
+// components
+import Alert from "./components/layout/Alert"
+import Navbar from "./components/layout/Navbar"
+
+// contexts
 import GithubState from "./context/github/GithubState"
+import AlertState from "./context/alert/AlertState"
 
 const App = () => {
-  const [users, setUsers] = useState([])
-  const [user, setUser] = useState({})
-  const [userRepos, setUserRepos] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [alert, setAlert] = useState(null)
-
-  const CLIENT_SECRET = process.env.REACT_APP_GITHUB_TOKEN
-
-  const searchUsers = async (username) => {
-    const URL = `https://api.github.com/search/users?q=${username}`
-    setLoading(true)
-    const res = await axios.get(URL, {
-      headers: { Authorization: "Bearer " + CLIENT_SECRET },
-    })
-    console.log(res.data.items)
-    setUsers(res.data.items)
-    setLoading(false)
-  }
-
-  const getUser = async (username) => {
-    const URL = `https://api.github.com/users/${username}`
-    setLoading(true)
-    const res = await axios.get(URL, {
-      headers: { Authorization: "Bearer " + CLIENT_SECRET },
-    })
-    setUser(res.data)
-    setLoading(false)
-  }
-
-  const getUserRepos = async (username) => {
-    const URL = `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc`
-    setLoading(true)
-    const res = await axios.get(URL, {
-      headers: { Authorization: "Bearer " + CLIENT_SECRET },
-    })
-    setUserRepos(res.data)
-    setLoading(false)
-  }
-
-  const showAlert = (msg, type) => {
-    setAlert({ msg: msg, type: type })
-    setTimeout(() => setAlert(null), 5000)
-  }
-
   return (
     <GithubState>
-      <Router>
-        <div className='App'>
-          <Navbar />
-          <div className='container'>
-            <Alert alert={alert} />
-            <Switch>
-              <Route
-                exact
-                path='/'
-                render={() => (
-                  <>
-                    <Search
-                      searchUsers={searchUsers}
-                      clearUsers={() => setUser([])}
-                      showClear={users.length > 0}
-                      showAlert={showAlert}
-                    />
-                    <Users loading={loading} users={users} />
-                  </>
-                )}
-              />
-              <Route path='/about' component={About} />
-              <Route
-                path='/user/:username'
-                render={(props) => (
-                  <User
-                    {...props}
-                    getUser={getUser}
-                    user={user}
-                    getUserRepos={getUserRepos}
-                    userRepos={userRepos}
-                    loading={loading}
-                  />
-                )}
-              />
-            </Switch>
+      <AlertState>
+        <Router>
+          <div className='App'>
+            <Navbar />
+            <div className='container'>
+              <Alert />
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route path='/about' component={About} />
+                <Route path='/user/:username' component={User} />
+                <Route path='*' component={_404} />
+              </Switch>
+            </div>
           </div>
-        </div>
-      </Router>
+        </Router>
+      </AlertState>
     </GithubState>
   )
 }
