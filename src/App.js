@@ -9,6 +9,7 @@ import Alert from "./components/layout/Alert"
 import Search from "./components/users/Search"
 import About from "./components/pages/About"
 import User from "./components/pages/User"
+import GithubState from "./context/github/GithubState"
 
 const App = () => {
   const [users, setUsers] = useState([])
@@ -56,45 +57,47 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div className='App'>
-        <Navbar />
-        <div className='container'>
-          <Alert alert={alert} />
-          <Switch>
-            <Route
-              exact
-              path='/'
-              render={() => (
-                <>
-                  <Search
-                    searchUsers={searchUsers}
-                    clearUsers={() => setUser([])}
-                    showClear={users.length > 0}
-                    showAlert={showAlert}
+    <GithubState>
+      <Router>
+        <div className='App'>
+          <Navbar />
+          <div className='container'>
+            <Alert alert={alert} />
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={() => (
+                  <>
+                    <Search
+                      searchUsers={searchUsers}
+                      clearUsers={() => setUser([])}
+                      showClear={users.length > 0}
+                      showAlert={showAlert}
+                    />
+                    <Users loading={loading} users={users} />
+                  </>
+                )}
+              />
+              <Route path='/about' component={About} />
+              <Route
+                path='/user/:username'
+                render={(props) => (
+                  <User
+                    {...props}
+                    getUser={getUser}
+                    user={user}
+                    getUserRepos={getUserRepos}
+                    userRepos={userRepos}
+                    loading={loading}
                   />
-                  <Users loading={loading} users={users} />
-                </>
-              )}
-            />
-            <Route path='/about' component={About} />
-            <Route
-              path='/user/:username'
-              render={(props) => (
-                <User
-                  {...props}
-                  getUser={getUser}
-                  user={user}
-                  getUserRepos={getUserRepos}
-                  userRepos={userRepos}
-                  loading={loading}
-                />
-              )}
-            />
-          </Switch>
+                )}
+              />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </GithubState>
   )
 }
 
