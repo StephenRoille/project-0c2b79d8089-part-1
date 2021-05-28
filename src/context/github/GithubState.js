@@ -18,11 +18,11 @@ const GithubState = (props) => {
     loading: false,
   }
   const [state, dispatch] = useReducer(GithubReducer, initialState)
-
+  var CLIENT_TOKEN
   if (process.env.NODE_ENV === "production") {
-    var CLIENT_TOKEN = process.env.GITHUB_TOKEN
+    CLIENT_TOKEN = process.env.GITHUB_TOKEN
   } else {
-    var CLIENT_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
+    CLIENT_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
   }
 
   const searchUsers = async (username) => {
