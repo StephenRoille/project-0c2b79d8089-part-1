@@ -10,6 +10,13 @@ import {
   GET_USER_REPOS,
 } from "../types"
 
+let CLIENT_TOKEN
+if (process.env.NODE_ENV === "production") {
+  CLIENT_TOKEN = process.env.GITHUB_TOKEN
+} else {
+  CLIENT_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
+}
+
 const GithubState = (props) => {
   const initialState = {
     users: [],
@@ -19,13 +26,11 @@ const GithubState = (props) => {
   }
   const [state, dispatch] = useReducer(GithubReducer, initialState)
 
-  const CLIENT_SECRET = process.env.REACT_APP_GITHUB_TOKEN
-
   const searchUsers = async (username) => {
     dispatch({ type: SET_LOADING })
     const URL = `https://api.github.com/search/users?q=${username}`
     const res = await axios.get(URL, {
-      headers: { Authorization: `token ${CLIENT_SECRET}` },
+      headers: { Authorization: `token ${CLIENT_TOKEN}` },
     })
     dispatch({ type: SEARCH_USERS, payload: res.data.items })
   }
@@ -36,7 +41,7 @@ const GithubState = (props) => {
     dispatch({ type: SET_LOADING })
     const URL = `https://api.github.com/users/${username}`
     const res = await axios.get(URL, {
-      headers: { Authorization: `token ${CLIENT_SECRET}` },
+      headers: { Authorization: `token ${CLIENT_TOKEN}` },
     })
     dispatch({ type: GET_USER, payload: res.data })
   }
@@ -45,7 +50,7 @@ const GithubState = (props) => {
     dispatch({ type: SET_LOADING })
     const URL = `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc`
     const res = await axios.get(URL, {
-      headers: { Authorization: `token ${CLIENT_SECRET}` },
+      headers: { Authorization: `token ${CLIENT_TOKEN}` },
     })
     dispatch({ type: GET_USER_REPOS, payload: res.data })
   }
