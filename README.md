@@ -1,5 +1,7 @@
 # Screenshots
 
+A live version of this project is available at [search-github-users-with-reactjs.netlify.app](https://search-github-users-with-reactjs.netlify.app/)
+
 ![Search page for user octocat](https://github.com/StephenRoille/project-0c2b79d8089-part-1/blob/master/screenshots/search_engine.png)
 ![Information page for user octocat](https://github.com/StephenRoille/project-0c2b79d8089-part-1/blob/master/screenshots/user_info.png)
 
