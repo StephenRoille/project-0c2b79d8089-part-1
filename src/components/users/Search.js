@@ -26,8 +26,14 @@ const Search = ({ clearUsers, showClear, showAlert, searchUsers }) => {
         <button type='submit' className='btn btn-dark btn-block' onClick={onClick}>
           Search
         </button>
+
         {showClear && (
-          <button type='submit' className='btn btn-light btn-block' onClick={clearUsers}>
+          <button
+            type='submit'
+            className='btn btn-light btn-block'
+            style={{ marginTop: "8px" }}
+            onClick={clearUsers}
+          >
             Clear
           </button>
         )}
@@ -39,7 +45,7 @@ const Search = ({ clearUsers, showClear, showAlert, searchUsers }) => {
 Search.propTypes = {
   searchUsers: PropTypes.func.isRequired,
   clearUsers: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired,
+  showAlert: PropTypes.func.isRequired,
 }
 
 export default Search
