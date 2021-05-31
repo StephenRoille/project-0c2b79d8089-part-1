@@ -17,8 +17,8 @@ const About = () => {
       </p>
       <p>
         <b>Version</b>: 0.1.0 - Made with{" "}
-        <i class='fas fa-heart' style={{ color: "red" }}></i> and React.js{" "}
-        <i class='fab fa-react' style={{ color: "turquoise" }}></i>
+        <i className='fas fa-heart' style={{ color: "red" }}></i> and React.js{" "}
+        <i className='fab fa-react' style={{ color: "turquoise" }}></i>
       </p>
     </>
   )
